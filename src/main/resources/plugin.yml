@@ -1,0 +1,8 @@
+name: "BlockProtect"
+version: "1.0"
+main: "me.martinitslinda.blockprotect.BlockProtect"
+author: "MartinItsLinda"
+softdepend: [WorldGuard]
+description: ""
+
+commands:
