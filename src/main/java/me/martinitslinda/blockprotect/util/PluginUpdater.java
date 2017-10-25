@@ -18,43 +18,42 @@ public class PluginUpdater{
     private static final String SPIGOT_URL="https://spigot.org/";
     private static final int RESOURCE_ID=0;
 
-    private JavaPlugin plugin=null;
-    private String latestVersion=null;
-    private String latestVersionURL=null;
+    private final JavaPlugin plugin;
+    private String latestVersion;
+    private String latestVersionURL;
 
-    public PluginUpdater(JavaPlugin plugin){
+    public PluginUpdater(final JavaPlugin plugin){
         this.plugin=plugin;
     }
 
-    private boolean checkHigher(String currentVersion, String newVersion){
+    private boolean checkHigher(final String currentVersion, final String newVersion){
         return currentVersion.compareTo(newVersion) < 0;
     }
 
-    public void checkUpdate(String currentVersion) throws IOException{
+    public void checkUpdate(final String currentVersion) throws IOException{
 
-        URL url=new URL(SPIGET_URL + "v2/resources/" + RESOURCE_ID + "/versions");
+        final URL url=new URL(SPIGET_URL + "v2/resources/" + RESOURCE_ID + "/versions");
 
-        HttpURLConnection connection=(HttpURLConnection) url.openConnection();
+        final HttpURLConnection connection=(HttpURLConnection) url.openConnection();
         connection.addRequestProperty("Content-Type", "text/json");
         connection.addRequestProperty("User-Agent", "Mozilla/5.0"); // Mozilla 5.0 User-Agent
         connection.setUseCaches(false);
         connection.setDoInput(false);
 
-        try(InputStream inputStream=connection.getInputStream();
-            InputStreamReader reader=new InputStreamReader(inputStream)){
+        try(final InputStream inputStream=connection.getInputStream();
+            final InputStreamReader reader=new InputStreamReader(inputStream)){
 
-            JsonElement element=new JsonParser().parse(reader);
-            JsonArray jsonArray=element.getAsJsonArray();
+            final JsonElement element=new JsonParser().parse(reader);
 
             //GET /resources/{resourceId}/versions returns in Oldest > Newest order
             //So we need to reverse it to get the latest version
-            jsonArray=reverseArray(jsonArray);
+            final JsonArray jsonArray=reverseArray(element.getAsJsonArray());
 
-            JsonObject object=jsonArray.get(0).getAsJsonObject();
+            final JsonObject object=jsonArray.get(0).getAsJsonObject();
 
-            String version=object.get("name").getAsString();
+            final String version=object.get("name").getAsString();
 
-            if(!checkHigher(currentVersion, version)) return;
+            if(!this.checkHigher(currentVersion, version)) return;
 
             this.latestVersion=version;
             this.latestVersionURL=SPIGOT_URL + object.get("url").getAsString();
@@ -64,22 +63,22 @@ public class PluginUpdater{
 
     }
     public String getLatestVersion(){
-        return latestVersion;
+        return this.latestVersion;
     }
 
     public String getLatestVersionURL(){
-        return latestVersionURL;
+        return this.latestVersionURL;
     }
 
     public boolean hasUpdate() throws IOException{
-        if(latestVersion == null){
-            checkUpdate(plugin.getDescription().getVersion());
+        if(this.latestVersion == null){
+            this.checkUpdate(plugin.getDescription().getVersion());
         }
-        return latestVersion != null;
+        return this.latestVersion != null;
     }
 
-    private JsonArray reverseArray(JsonArray jsonArray){
-        JsonArray arr=new JsonArray();
+    private JsonArray reverseArray(final JsonArray jsonArray){
+        final JsonArray arr=new JsonArray();
         for(int i=jsonArray.size() - 1; i >= 0; i--){
             arr.add(jsonArray.get(i));
         }

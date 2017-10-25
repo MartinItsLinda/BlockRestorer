@@ -9,33 +9,35 @@ import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 
 public class Protocol_v1_12_R1 implements Protocol{
 
-    public boolean setBlock(World world, int x, int y, int z, int blockId, byte data){
+    public boolean setBlock(final World world, final int x, final int y, final int z, final int blockId, final byte data){
 
-        net.minecraft.server.v1_12_R1.World craftWorld=((CraftWorld) world).getHandle();
-        net.minecraft.server.v1_12_R1.Chunk craftChunk=craftWorld.getChunkAt(x >> 4, z >> 4);
+        if (y <= 0 || y > world.getMaxHeight()){ return false; }
 
-        BlockPosition position=new BlockPosition(x, y, z);
-        IBlockData blockData=Block.getByCombinedId(blockId + (data << 12));
+        final net.minecraft.server.v1_12_R1.World craftWorld=((CraftWorld) world).getHandle();
+        final net.minecraft.server.v1_12_R1.Chunk craftChunk=craftWorld.getChunkAt(x >> 4, z >> 4);
 
-        IBlockData refresh=craftChunk.a(position, blockData);
+        final BlockPosition position=new BlockPosition(x, y, z);
+        final IBlockData blockData=Block.getByCombinedId(blockId + (data << 12));
+
+        final IBlockData refresh=craftChunk.a(position, blockData);
 
         return refresh != null;
     }
 
     public void doPhysics(World world, int x, int y, int z){
 
-        net.minecraft.server.v1_12_R1.World craftWorld=((CraftWorld) world).getHandle();
-        net.minecraft.server.v1_12_R1.Chunk craftChunk=craftWorld.getChunkAt(x >> 4, z >> 4);
+        final net.minecraft.server.v1_12_R1.World craftWorld=((CraftWorld) world).getHandle();
+        final net.minecraft.server.v1_12_R1.Chunk craftChunk=craftWorld.getChunkAt(x >> 4, z >> 4);
 
-        BlockPosition position=new BlockPosition(x, y, z);
-        Block block=craftChunk.getBlockData(position).getBlock();
+        final BlockPosition position=new BlockPosition(x, y, z);
+        final Block block=craftChunk.getBlockData(position).getBlock();
 
         craftWorld.update(position, block, true);
     }
 
     public void doBlockLighting(World world, int x, int y, int z){
 
-        net.minecraft.server.v1_12_R1.World craftWorld=((CraftWorld) world).getHandle();
+        final net.minecraft.server.v1_12_R1.World craftWorld=((CraftWorld) world).getHandle();
 
 
     }
