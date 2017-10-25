@@ -11,7 +11,7 @@ public class PluginConfiguration{
     private final JavaPlugin plugin;
     private final Map<String, Object> values=Maps.newHashMap();
 
-    public PluginConfiguration(JavaPlugin plugin){
+    public PluginConfiguration(final JavaPlugin plugin){
         this.plugin=plugin;
     }
 

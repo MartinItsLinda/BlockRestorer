@@ -6,3 +6,5 @@ softdepend: [WorldGuard]
 description: ""
 
 commands:
+    blockprotect:
+        usage: "/blockprotect <blockId> <blockData>"
