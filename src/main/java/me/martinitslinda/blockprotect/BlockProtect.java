@@ -192,8 +192,13 @@ public class BlockProtect extends JavaPlugin{
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
+
+        Player player = (Player)sender;
+
         return true;
     }
+
+
 
     public List<BukkitRunnable> getRunnables(){
         return this.runnables;
